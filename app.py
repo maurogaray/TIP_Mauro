@@ -13,7 +13,7 @@ from wtforms.validators import Length, Email
 
 from werkzeug.security import generate_password_hash, check_password_hash
 
-from dash_application import create_kpi1
+from dash_application import create_kpi1, create_kpi3, create_kpi4, create_kpi5, create_kpi6
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "THIS IS A SECRET, DON'T DO THIS!"
@@ -24,7 +24,10 @@ migrate = Migrate(app, db)
 login = LoginManager()
 login.init_app(app)
 create_kpi1(app)
-
+create_kpi3(app)
+create_kpi4(app)
+create_kpi5(app)
+create_kpi6(app)
 
 @login.user_loader
 def user_loader(user_id):
@@ -41,17 +44,14 @@ class LoginForm(FlaskForm):
     email = StringField("email", validators=[Email()])
     password = PasswordField("password", validators=[Length(min=5)])
 
-
 class RegisterForm(FlaskForm):
     email = StringField("email", validators=[Email()])
     password = PasswordField("password", validators=[Length(min=5)])
     repeat_password = PasswordField("repated_password", validators=[Length(min=5)])
 
-
 @app.route("/")
 def index():
     return render_template("index.html")
-
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -66,7 +66,6 @@ def login():
             return redirect(url_for("index"))
 
     return render_template("login.html", form=form)
-
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -84,12 +83,30 @@ def register():
 
     return render_template("register.html", form=form)
 
-
 @app.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
+@app.route("/kpi1_end")
+def kpi1():
+    return render_template("kpi1.html")
+
+@app.route("/kpi6_end")
+def kpi6():
+    return render_template("kpi6.html")
+
+@app.route("/kpi3_end")
+def kpi3():
+    return render_template("kpi3.html")
+
+@app.route("/kpi4_end")
+def kpi4():
+    return render_template("kpi4.html")
+
+@app.route("/kpi5_end")
+def kpi5():
+    return render_template("kpi5.html")
 
 if __name__ == "__main__":
     app.run()
