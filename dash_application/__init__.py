@@ -80,14 +80,14 @@ for dict in KPI3JSON:
 
 kpi3_df = pd.DataFrame({
     "Months": kpi3_months,
-    "brbaja": kpi3_brbaja,
-    "brmedia": kpi3_brmedia,
-    "bralta": kpi3_bralta,
-    "brcritica":kpi3_brcritica,
-    "mtbaja": kpi3_mtbaja,
-    "mtmedia": kpi3_mtmedia,
-    "mtalta": kpi3_mtalta,
-    "mtcritica":kpi3_mtcritica,
+    "Breach fuera del SLA, cat = Baja ": kpi3_brbaja,
+    "Breach fuera del SLA, cat = Media": kpi3_brmedia,
+    "Breach fuera del SLA, cat = Alta": kpi3_bralta,
+    "Breach fuera del SLA, cat = Crítico":kpi3_brcritica,
+    "Dentro del SLA, cat = Baja": kpi3_mtbaja,
+    "Dentro del SLA, cat = Media": kpi3_mtmedia,
+    "Dentro del SLA, cat = Alta": kpi3_mtalta,
+    "Dentro del SLA, cat = Crítico":kpi3_mtcritica,
 })
 
 def create_kpi3(flask_app):
@@ -99,12 +99,12 @@ def create_kpi3(flask_app):
             html.H1(children=''),
 
             html.Div(children='''
-                Nivel Bajo
+                Nivel Bajo 
             '''),
 
-            dcc.Graph(
+            dcc.Graph(                              #Breach dentro de del SLA, cat = Baja 
             id='kpi3-graph1',
-            figure= px.bar(kpi3_df, x="Months", y=["brbaja", "mtbaja"], barmode="group")
+            figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Baja ", "Dentro del SLA, cat = Baja"], barmode="group")
             ),  
         ]),
         # MEDIA
@@ -116,8 +116,8 @@ def create_kpi3(flask_app):
             '''),
 
             dcc.Graph(
-            id='kpi3-graph2',
-            figure= px.bar(kpi3_df, x="Months", y=["brmedia", "mtmedia"], barmode="group")
+            id='kpi3-graph2',                       #Breach fuera del SLA, cat = Media  
+            figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Media", "Dentro del SLA, cat = Media"], barmode="group")
             ), 
         
         ]),
@@ -130,8 +130,8 @@ def create_kpi3(flask_app):
             '''),
 
             dcc.Graph(
-            id='kpi3-graph3',
-            figure= px.bar(kpi3_df, x="Months", y=["bralta", "mtalta"], barmode="group")
+            id='kpi3-graph3',                       #Breach fuera del SLA, cat = Alta 
+            figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Alta", "Dentro del SLA, cat = Alta"], barmode="group")
             ), 
         
         ]),
@@ -147,7 +147,7 @@ def create_kpi3(flask_app):
 
             dcc.Graph(
             id='kpi3-graph4',
-            figure= px.bar(kpi3_df, x="Months", y=["brcritica", "mtcritica"], barmode="group")
+            figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Crítico", "Dentro del SLA, cat = Crítico"], barmode="group")
             ), 
         
         ]),
