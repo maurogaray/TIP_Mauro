@@ -4,7 +4,7 @@
 {%- block html %}
   <head>
     {%- block head %}
-    <title>{% block title %}{{title|default}}{% endblock title %}</title>
+    <title>{% block title %}Iberia{% endblock title %}</title>
     
     {%- block metas %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,16 +45,17 @@
             <li class="nav-item">
                 <a class="nav-link " href="{{ url_for('logout') }}">Logout</a>
             </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Dashboard
+            <!-- # navbarDarkDropdownMenuLink -->
+            <li class="nav-item dropdown">                      
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                Dashboard KPI's
               </a>
-              <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
-                <li><a class="dropdown-item" href="/kpi1">KPI1</a></li>
-                <li><a class="dropdown-item" href="/kpi3">KPI3</a></li>
-                <li><a class="dropdown-item" href="/kpi4">KPI4</a></li>
-                <li><a class="dropdown-item" href="/kpi5">KPI5</a></li>
-                <li><a class="dropdown-item" href="/kpi6">KPI6</a></li>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a class="dropdown-item" href="/kpi1_end">Incidences Per Month</a></li>
+                <li><a class="dropdown-item" href="/kpi3_end">SLA</a></li>
+                <li><a class="dropdown-item" href="/kpi4_end">Backlog</a></li>
+                <li><a class="dropdown-item" href="/kpi5_end">Critical Services %</a></li>
+                <li><a class="dropdown-item" href="/kpi6_end">Availability</a></li>
               </ul>
             </li>
           </ul>
@@ -75,6 +76,13 @@
     <script src="{{bootstrap_find_resource('js/bootstrap.js', cdn='bootstrap')}}"></script>
     {%- endblock scripts %}
     {%- endblock body %}
+    <!-- Footer -->
+ <footer class="navbar-fixed-bottom py-5" style="background-color: #d7192d; text-align: left;" >
+  <div class="container" >
+    <p class="m-0 text-grey" >Copyright &copy; Iberia 2021</p>
+  </div>
+  <!-- /.container -->
+</footer>
   </body>
 {%- endblock html %}
 </html>

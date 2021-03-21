@@ -6,6 +6,7 @@ from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_login import LoginManager, login_user
+from flask_login import login_required
 from flask_login.mixins import UserMixin
 
 from wtforms import StringField, PasswordField
@@ -47,7 +48,7 @@ class LoginForm(FlaskForm):
 class RegisterForm(FlaskForm):
     email = StringField("email", validators=[Email()])
     password = PasswordField("password", validators=[Length(min=5)])
-    repeat_password = PasswordField("repated_password", validators=[Length(min=5)])
+    repeat_password = PasswordField("repeat password", validators=[Length(min=5)])
 
 @app.route("/")
 def index():
@@ -92,10 +93,6 @@ def logout():
 def kpi1():
     return render_template("kpi1.html")
 
-@app.route("/kpi6_end")
-def kpi6():
-    return render_template("kpi6.html")
-
 @app.route("/kpi3_end")
 def kpi3():
     return render_template("kpi3.html")
@@ -108,5 +105,9 @@ def kpi4():
 def kpi5():
     return render_template("kpi5.html")
 
+@app.route("/kpi6_end")
+def kpi6():
+    return render_template("kpi6.html")
+
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

@@ -7,13 +7,14 @@ import pandas as pd
 import requests
 import json
 from dash.dependencies import Input, Output
+from flask_login import login_required
 
 #GET KPI1
 KPI1 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
 r = requests.get(KPI1)
 KPI1JSON = r.json()["items"]
 
-#SIMPLE VERSION 
+
 
 k1_months = []
 k1_incidences_numbers = []
@@ -41,19 +42,21 @@ def create_kpi1(flask_app):
         
     )
 
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
+
     return dash_app
 
-#GET KPI2
-KPI2 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
-r2 = requests.get(KPI2)
-KPI2JSON = r2.json()["items"]
 
-#GET KPI3
+#GET KPI2
 KPI3 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi3/sla/"
 r3 = requests.get(KPI3)
 KPI3JSON = r3.json()["items"]
 
-#KPI3
+#KPI2
 kpi3_months = []
 kpi3_brbaja=[]
 kpi3_brmedia=[]
@@ -93,10 +96,10 @@ def create_kpi3(flask_app):
     dash_app.layout = html.Div(children=[
         # BAJA
         html.Div([
-            html.H1(children='Hello Dash'),
+            html.H1(children=''),
 
             html.Div(children='''
-                Dash: A web application framework for Python.
+                Nivel Bajo
             '''),
 
             dcc.Graph(
@@ -106,10 +109,10 @@ def create_kpi3(flask_app):
         ]),
         # MEDIA
         html.Div([
-            html.H1(children='Hello Dash'),
+            html.H1(children=''),
 
             html.Div(children='''
-                Dash: A web application framework for Python.
+                Nivel Medio
             '''),
 
             dcc.Graph(
@@ -118,12 +121,12 @@ def create_kpi3(flask_app):
             ), 
         
         ]),
-        # ALTA
+        # Nivel ALTO
         html.Div([
-            html.H1(children='Hello Dash'),
+            html.H1(children=''),
 
             html.Div(children='''
-                Dash: A web application framework for Python.
+                Nivel Alto
             '''),
 
             dcc.Graph(
@@ -132,12 +135,14 @@ def create_kpi3(flask_app):
             ), 
         
         ]),
-        # CRITICA
+        # Nivel CRITICO
         html.Div([
-            html.H1(children='Hello Dash'),
+            html.H1(children=''),
 
             html.Div(children='''
-                Dash: A web application framework for Python.
+
+            Nivel Crítico
+                
             '''),
 
             dcc.Graph(
@@ -148,28 +153,32 @@ def create_kpi3(flask_app):
         ]),
         
     ])
+
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
+
     return dash_app
 
-#GET KPI4
-KPI4 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi4/BL/"
+#KPI4
+KPI4 = "https://HWKY9DC1AQ0HOOB-DB202101281644.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi4/BL/"
 r4 = requests.get(KPI4)
 KPI4JSON = r4.json()["items"]
 
-#SIMPLE VERSION 
 
 k4_months = []
-k4_incidences_numbers = []
+k4_incident_code = []
 
 for dict in KPI4JSON:
     k4_months.append(dict["month"])
-    k4_incidences_numbers.append(dict["incidences_number"])
+    k4_incident_code.append(dict["incident_code"])
 
-#print(k4_months)
-#print(k4_incidences_numbers)
 
 k4_df = pd.DataFrame({
     "Months": k4_months,
-    "Number of incidents": k4_incidences_numbers,
+    "Number of incidents": k4_incident_code,
 })
 
 def create_kpi4(flask_app):
@@ -181,31 +190,38 @@ def create_kpi4(flask_app):
             figure= px.bar(k4_df, x="Months", y="Number of incidents", barmode="group")
         ),       
     )
+
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
+
     return dash_app
 
-#GET KPI5
-KPI5 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi5/av/"
+#GET KPI4
+KPI5 = "https://HWKY9DC1AQ0HOOB-DB202101281644.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi5/av/"
 r5 = requests.get(KPI5)
 KPI5JSON = r5.json()["items"]
 
 #SIMPLE VERSION 
 
-k5_months = []
+k5_month = []
 k5_unavailability_time = []
 k5_availability_percentage = []
-k5_service = []
+k5_service_name = []
 
 for dict in KPI5JSON:
-    k5_months.append(dict["month"])
+    k5_month.append(dict["month"])
     k5_unavailability_time.append(dict["unavailability_time"])
     k5_availability_percentage.append(dict["availability_percentage"])
-    k5_service.append(dict["service"])
+    k5_service_name.append(dict["service_name"])
 
 k5_df = pd.DataFrame({
-    "Months": k5_months,
+    "Months": k5_month,
     "Number of Unavailability": k5_unavailability_time,
     "Percentage of Availability": k5_availability_percentage,
-    "Service": k5_service,
+    "Service": k5_service_name,
 })
 
 def create_kpi5(flask_app):
@@ -218,10 +234,17 @@ def create_kpi5(flask_app):
         ),  
         
     )
+
+    for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
+
     return dash_app
 
-#GET KPI4
-KPI6 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi6/monav/"
+#GET KPI5
+KPI6 = "https://HWKY9DC1AQ0HOOB-DB202101281644.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi6/monav/"
 r6 = requests.get(KPI6)
 KPI6JSON = r6.json()["items"]
 
@@ -247,4 +270,11 @@ def create_kpi6(flask_app):
         ),  
         
     )
+
+      for view_function in dash_app.server.view_functions:
+        if view_function.startswith(dash_app.config.url_base_pathname):
+            dash_app.server.view_functions[view_function] = login_required(
+                dash_app.server.view_functions[view_function]
+            )
+
       return dash_app
