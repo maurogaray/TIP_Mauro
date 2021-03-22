@@ -4,7 +4,7 @@ from flask_bootstrap import Bootstrap
 from flask_login.utils import logout_user
 from flask_wtf import FlaskForm
 from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+from flask_migrate import Migrate, upgrade
 from flask_login import LoginManager, login_user
 from flask_login import login_required
 from flask_login.mixins import UserMixin
@@ -18,7 +18,8 @@ from dash_application import create_kpi1, create_kpi3, create_kpi4, create_kpi5,
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "THIS IS A SECRET, DON'T DO THIS!"
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite.db"
+#app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///sqlite.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:maurotipdb@/User?unix_socket=/cloudsql/mauro-tip:europe-west1:maurotipdb"
 Bootstrap(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -108,6 +109,13 @@ def kpi5():
 @app.route("/kpi6_end")
 def kpi6():
     return render_template("kpi6.html")
+
+@app.route('/admin/dbupgrade')    ##Consider replacing; not very secure
+def dbupgrade():
+
+    migrate = Migrate(app, db)
+    upgrade(directory=migrate.directory)
+    return 'migrated'
 
 if __name__ == "__main__":
     app.run(debug=True)

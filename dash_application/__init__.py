@@ -10,7 +10,7 @@ from dash.dependencies import Input, Output
 from flask_login import login_required
 
 #GET KPI1
-KPI1 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi1/incvol/"
+KPI1 = "https://HWKY9DC1AQ0HOOB-DB202101281644.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi1/incvol/"
 r = requests.get(KPI1)
 KPI1JSON = r.json()["items"]
 
@@ -22,7 +22,7 @@ k1_priorities = []
 
 for dict in KPI1JSON:
     k1_months.append(dict["month"])
-    k1_incidences_numbers.append(dict["incidences_number"])
+    k1_incidences_numbers.append(dict["incidences_code"])
     k1_priorities.append(dict["priority"])
 
 k1_df = pd.DataFrame({
@@ -38,25 +38,23 @@ def create_kpi1(flask_app):
         dcc.Graph(
             id='kpi1-graph',
             figure= px.bar(k1_df, x="Months", y="Number of incidents", color="Priority", barmode="group")
-        ),  
+        )  
         
     )
 
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(
-                dash_app.server.view_functions[view_function]
-            )
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
 
     return dash_app
 
 
-#GET KPI2
-KPI3 = "https://qovo4nsf3oonbax-db202103111252.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip_rose/kpi3/sla/"
+#KPI3
+KPI3 = "https://HWKY9DC1AQ0HOOB-DB202101281644.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi3/sla/"
 r3 = requests.get(KPI3)
 KPI3JSON = r3.json()["items"]
 
-#KPI2
+#KPI3
 kpi3_months = []
 kpi3_brbaja=[]
 kpi3_brmedia=[]
@@ -96,8 +94,6 @@ def create_kpi3(flask_app):
     dash_app.layout = html.Div(children=[
         # BAJA
         html.Div([
-            html.H1(children=''),
-
             html.Div(children='''
                 Nivel Bajo 
             '''),
@@ -105,12 +101,10 @@ def create_kpi3(flask_app):
             dcc.Graph(                              #Breach dentro de del SLA, cat = Baja 
             id='kpi3-graph1',
             figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Baja ", "Dentro del SLA, cat = Baja"], barmode="group")
-            ),  
+            )  
         ]),
         # MEDIA
         html.Div([
-            html.H1(children=''),
-
             html.Div(children='''
                 Nivel Medio
             '''),
@@ -118,13 +112,10 @@ def create_kpi3(flask_app):
             dcc.Graph(
             id='kpi3-graph2',                       #Breach fuera del SLA, cat = Media  
             figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Media", "Dentro del SLA, cat = Media"], barmode="group")
-            ), 
-        
+            )
         ]),
         # Nivel ALTO
         html.Div([
-            html.H1(children=''),
-
             html.Div(children='''
                 Nivel Alto
             '''),
@@ -132,33 +123,24 @@ def create_kpi3(flask_app):
             dcc.Graph(
             id='kpi3-graph3',                       #Breach fuera del SLA, cat = Alta 
             figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Alta", "Dentro del SLA, cat = Alta"], barmode="group")
-            ), 
-        
+            ) 
         ]),
         # Nivel CRITICO
         html.Div([
-            html.H1(children=''),
-
             html.Div(children='''
-
-            Nivel Crítico
-                
+                Nivel Crítico
             '''),
 
             dcc.Graph(
             id='kpi3-graph4',
             figure= px.bar(kpi3_df, x="Months", y=["Breach fuera del SLA, cat = Crítico", "Dentro del SLA, cat = Crítico"], barmode="group")
-            ), 
-        
-        ]),
-        
+            ) 
+        ])
     ])
 
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(
-                dash_app.server.view_functions[view_function]
-            )
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
 
     return dash_app
 
@@ -188,18 +170,16 @@ def create_kpi4(flask_app):
         dcc.Graph(
             id='kpi4-graph',
             figure= px.bar(k4_df, x="Months", y="Number of incidents", barmode="group")
-        ),       
+        )       
     )
 
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(
-                dash_app.server.view_functions[view_function]
-            )
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
 
     return dash_app
 
-#GET KPI4
+#KPI5
 KPI5 = "https://HWKY9DC1AQ0HOOB-DB202101281644.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi5/av/"
 r5 = requests.get(KPI5)
 KPI5JSON = r5.json()["items"]
@@ -231,19 +211,16 @@ def create_kpi5(flask_app):
         dcc.Graph(
             id='kpi5-graph',
             figure= px.bar(k5_df, x="Months", y="Number of Unavailability", color="Service", hover_name="Percentage of Availability", barmode="group")
-        ),  
-        
+        )  
     )
 
     for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(
-                dash_app.server.view_functions[view_function]
-            )
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
 
     return dash_app
 
-#GET KPI5
+#KPI6
 KPI6 = "https://HWKY9DC1AQ0HOOB-DB202101281644.adb.eu-frankfurt-1.oraclecloudapps.com/ords/tip/kpi6/monav/"
 r6 = requests.get(KPI6)
 KPI6JSON = r6.json()["items"]
@@ -267,14 +244,11 @@ def create_kpi6(flask_app):
         dcc.Graph(
             id='kpi6-graph',
             figure= px.bar(k6_df, x="Months", y="Average", barmode="group")
-        ),  
-        
+        )  
     )
 
       for view_function in dash_app.server.view_functions:
         if view_function.startswith(dash_app.config.url_base_pathname):
-            dash_app.server.view_functions[view_function] = login_required(
-                dash_app.server.view_functions[view_function]
-            )
+            dash_app.server.view_functions[view_function] = login_required(dash_app.server.view_functions[view_function])
 
       return dash_app
